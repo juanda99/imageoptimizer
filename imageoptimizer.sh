@@ -55,7 +55,7 @@ optimize_image()
   ORIGSIZE=`stat -c%s $1`
   PREVIOUSSIZEREADABLE=`ls -lah $1 | awk '{ print $5}'`
   if [ "$MIMETYPE" == "image/jpeg" ]; then
-    jpegoptim -m $QUALITY --strip-all $1 #> /dev/null
+    jpegoptim -m$QUALITY --strip-all $1 #> /dev/null
   elif [ "$MIMETYPE" == "image/png" ]; then
     optipng -quiet -o7 -preserve $1
     #optipng -quiet -force -o7 $1
@@ -78,9 +78,9 @@ optimize_images()
   echo "***imageoptimizer has started***"
   # apply the compressimg script to every image file within the given directory
   # if the input is a single file, execute the script on it
-  ORIGSIZE=`du -sb $DIR | awk '{ print $1}'`
-  PREVIOUSREADABLESIZE=`du -sh $DIR | awk '{ print $1}'`
-  IMAGES=$(find $DIR -mtime -$TIME -type f -name "*.jpeg" -or -name "*.jpg" -or -name "*.png" -print0) # -exec ./prueba2 '{}' $QUALITY  \;
+  ORIGSIZEDIR=`du -sb $DIR | awk '{ print $1}'`
+  PREVIOUSREADABLESIZEDIR=`du -sh $DIR | awk '{ print $1}'`
+  IMAGES=$(find $DIR -mtime -$TIME -type f \( -name "*.jpeg" -or -name "*.jpg" -or -name "*.png" \)) # -exec ./prueba2 '{}' $QUALITY  \;
   IFS=$'\n' #so spaces won't bother inside filename
   for IMAGE in $IMAGES; do
     optimize_image $IMAGE
@@ -89,10 +89,8 @@ optimize_images()
   # generate stats
   NEWSIZE=`du -sb $DIR | awk '{ print $1}'`
   READABLESIZE=`du -sh $DIR | awk '{ print $1}'`
-  echo $NEWSIZE
-  echo $ORIGSIZE
-  ((PERCENTCHANGE=100-(NEWSIZE*100/ORIGSIZE)))
-  echo Directory $DIR is compress from $PREVIOUSREADABLESIZE to $READABLESIZE \($PERCENTCHANGE%\)
+  ((PERCENTCHANGE=100-(NEWSIZE*100/ORIGSIZEDIR)))
+  echo Directory $DIR is compress from $PREVIOUSREADABLESIZEDIR to $READABLESIZE \($PERCENTCHANGE%\)
   echo "***imageoptimezer has finished***"
 }
 

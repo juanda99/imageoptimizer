@@ -9,4 +9,4 @@ It uses optipng and jpegoptim under the hood. These binaries must be installed p
 
 ## Todo
 - Resize images (using mogrify)
-- Use some other optimization tool for better performance/compression 
+- Use some other optimization tools for better performance/compression 
